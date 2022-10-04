@@ -2,6 +2,26 @@ import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
+import ImagePopup from "./ImagePopup";
+
+let isEditProfilePopupOpen = false;
+let isAddPlacePopupOpen = false;
+let isEditAvatarPopupOpen = false;
+
+function handleEditAvatarClick() {
+  isEditAvatarPopupOpen = true;
+  console.log(`handleEditAvatarClick isOpen: ${isEditAvatarPopupOpen}`);
+}
+
+function handleEditProfileClick() {
+  isEditProfilePopupOpen = true;
+  console.log(`handleEditProfileClick isOpen: ${isEditProfilePopupOpen}`);
+}
+
+function handleAddPlaceClick() {
+  isAddPlacePopupOpen = true;
+  console.log(`handleEditProfileClick isOpen: ${isAddPlacePopupOpen}`);
+}
 
 function App() {
   return (
@@ -9,7 +29,9 @@ function App() {
 
       <Header/>
 
-      <Main/>
+      <Main handleEditAvatarClick={handleEditAvatarClick}
+            handleEditProfileClick={handleEditProfileClick}
+            handleAddPlaceClick={handleAddPlaceClick}/>
 
       <Footer/>
 
@@ -26,26 +48,8 @@ function App() {
                                 maxLength="200"/>
                          <span className="popup__error"></span>
                        </>
-                     }/>
-
-      {/*<div className="popup popup-profile">
-
-        <div className="popup__container">
-          <button className="popup__close-button" type="button"></button>
-          <h2 className="popup__title">Редактировать профиль</h2>
-          <form className="popup__form" name="input_type_nameJob" noValidate>
-            <input className="popup__input popup__input_type_name" type="text" name="name" value="" required
-                   minLength="2"
-                   maxLength="40"/>
-            <span className="popup__error"></span>
-            <input className="popup__input popup__input_type_job" type="text" name="job" value="" required
-                   minLength="2"
-                   maxLength="200"/>
-            <span className="popup__error"></span>
-            <button className="popup__save-button" type="submit">Сохранить</button>
-          </form>
-        </div>
-      </div>*/}
+                     }
+                     isOpen={isEditProfilePopupOpen}/>
 
       <PopupWithForm name="card" title="Новое место"
                      children={
@@ -58,56 +62,10 @@ function App() {
                                 placeholder="Ссылка на картинку" required/>
                          <span className="popup__error"></span>
                        </>
-                     }/>
-
-      {/*<div className="popup popup-card">
-
-        <div className="popup__container popup__container-card">
-          <button className="popup__close-button" type="button"></button>
-          <h2 className="popup__title">Новое место</h2>
-          <form className="popup__form" name="input_type_titleLink" noValidate>
-            <input className="popup__input popup__input_type_title" type="text" name="title" value=""
-                   placeholder="Название"
-                   required minLength="2" maxLength="30"/>
-            <span className="popup__error"></span>
-            <input className="popup__input popup__input_type_link" type="url" name="link" value=""
-                   placeholder="Ссылка на картинку" required/>
-            <span className="popup__error"></span>
-            <button className="popup__save-button popup__save-button-card popup__save-button_type_disabled"
-                    type="submit" disabled>Создать
-            </button>
-          </form>
-        </div>
-
-      </div>*/}
-
-
-
-      <div className="popup popup-image">
-
-        <div className="popup__container popup__container-image">
-          <button className="popup__close-button" type="button"></button>
-          <img className="popup__img"
-               src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg"
-               alt="Архыз"/>
-          <h2 className="popup__caption"></h2>
-        </div>
-
-      </div>
+                     }
+                     isOpen={isAddPlacePopupOpen}/>
 
       <PopupWithForm name="delete-card" title="Вы уверены?"/>
-
-      {/*<div className="popup popup-delete-card">
-
-        <div className="popup__container popup__container-delete-card">
-          <button className="popup__close-button" type="button"></button>
-          <h2 className="popup__title popup__title_type_delete">Вы уверены?</h2>
-          <form className="popup__form" name="input_type_delete-card" noValidate>
-            <button className="popup__save-button popup__save-button_type_delete" type="submit">Да</button>
-          </form>
-        </div>
-
-      </div>*/}
 
       <PopupWithForm name="avatar" title="Обновить аватар"
                      children={
@@ -116,34 +74,10 @@ function App() {
                                 placeholder="Ссылка на аватар" required/>
                          <span className="popup__error"></span>
                        </>
-                     }/>
+                     }
+                      isOpen={isEditAvatarPopupOpen}/>
 
-      {/*<div className="popup popup-avatar">
-
-        <div className="popup__container popup__container-avatar">
-          <button className="popup__close-button" type="button"></button>
-          <h2 className="popup__title">Обновить аватар</h2>
-          <form className="popup__form" name="input_type_avatar" noValidate>
-            <input className="popup__input popup__input_type_avatar" type="url" name="avatar" value=""
-                   placeholder="Ссылка на аватар" required/>
-            <span className="popup__error"></span>
-            <button className="popup__save-button popup__save-button-avatar popup__save-button_type_disabled"
-                    type="submit" disabled>Сохранить
-            </button>
-          </form>
-        </div>
-
-      </div>*/}
-
-      <div className="popup popup-server-error">
-
-        <div className="popup__container popup__container-delete-card">
-          <button className="popup__close-button" type="button"></button>
-          <h2 className="popup__title popup__title_type_delete">Возникла ошибка</h2>
-          <span className="popup__error popup__error_server"></span>
-        </div>
-
-      </div>
+      <ImagePopup/>
 
       <template className="element-template">
 
