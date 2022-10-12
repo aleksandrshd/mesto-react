@@ -64,13 +64,13 @@ function App() {
                      buttonText='Сохранить'>
         {
           <>
-            <input className="popup__input popup__input_type_name" type="text" name="name" value=""
+            <input className="popup__input popup__input_type_name" type="text" name="name"
                    placeholder="Имя пользователя"
                    required
                    minLength="2"
                    maxLength="40"/>
             <span className="popup__error"></span>
-            <input className="popup__input popup__input_type_job" type="text" name="job" value=""
+            <input className="popup__input popup__input_type_job" type="text" name="job"
                    placeholder="Описание"
                    required
                    minLength="2"
@@ -86,11 +86,11 @@ function App() {
                      buttonText='Создать'>
         {
           <>
-            <input className="popup__input popup__input_type_title" type="text" name="title" value=""
+            <input className="popup__input popup__input_type_title" type="text" name="title"
                    placeholder="Название"
                    required minLength="2" maxLength="30"/>
             <span className="popup__error"></span>
-            <input className="popup__input popup__input_type_link" type="url" name="link" value=""
+            <input className="popup__input popup__input_type_link" type="url" name="link"
                    placeholder="Ссылка на картинку" required/>
             <span className="popup__error"></span>
           </>
@@ -105,7 +105,7 @@ function App() {
                      buttonText='Сохранить'>
         {
           <>
-            <input className="popup__input popup__input_type_avatar" type="url" name="avatar" value=""
+            <input className="popup__input popup__input_type_avatar" type="url" name="avatar"
                    placeholder="Ссылка на аватар" required/>
             <span className="popup__error"></span>
           </>
