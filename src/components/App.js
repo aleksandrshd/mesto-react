@@ -62,8 +62,7 @@ function App() {
                      isOpen={isEditProfilePopupOpen}
                      onClose={closeAllPopups}
                      buttonText='Сохранить'>
-        {
-          <>
+
             <input className="popup__input popup__input_type_name" type="text" name="name"
                    placeholder="Имя пользователя"
                    required
@@ -76,16 +75,14 @@ function App() {
                    minLength="2"
                    maxLength="200"/>
             <span className="popup__error"></span>
-          </>
-        }
+
       </PopupWithForm>
 
       <PopupWithForm name="card" title="Новое место"
                      isOpen={isAddPlacePopupOpen}
                      onClose={closeAllPopups}
                      buttonText='Создать'>
-        {
-          <>
+
             <input className="popup__input popup__input_type_title" type="text" name="title"
                    placeholder="Название"
                    required minLength="2" maxLength="30"/>
@@ -93,8 +90,7 @@ function App() {
             <input className="popup__input popup__input_type_link" type="url" name="link"
                    placeholder="Ссылка на картинку" required/>
             <span className="popup__error"></span>
-          </>
-        }
+
       </PopupWithForm>
 
       <PopupWithForm name="delete-card" title="Вы уверены?" buttonText='Да'/>
@@ -103,13 +99,11 @@ function App() {
                      isOpen={isEditAvatarPopupOpen}
                      onClose={closeAllPopups}
                      buttonText='Сохранить'>
-        {
-          <>
+
             <input className="popup__input popup__input_type_avatar" type="url" name="avatar"
                    placeholder="Ссылка на аватар" required/>
             <span className="popup__error"></span>
-          </>
-        }
+
       </PopupWithForm>
 
       <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
@@ -118,8 +112,7 @@ function App() {
                      isOpen={isServerErrorPopupOpen}
                      onClose={closeAllPopups}
                      serverError={serverError}
-                     buttonText='Ок'>
-      </PopupWithServerError>
+                     buttonText='Ок'/>
 
     </div>
   );

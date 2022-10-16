@@ -11,35 +11,29 @@ function Main(props) {
 
   React.useEffect(() => {
 
-    api
-      .getUserInfo()
 
-      .then((data) => {
-        if (data.name) {
-          setUserName(data.name);
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+
+      .then(([userData, cards]) => {
+
+        if (userData.name) {
+          setUserName(userData.name);
         } else {
           throw new Error('Имя пользователя не было передано');
         }
-        if (data.about) {
-          setUserDescription(data.about);
+        if (userData.about) {
+          setUserDescription(userData.about);
         } else {
           throw new Error('Описание пользователя не было передано');
         }
-        if (data.avatar) {
-          setUserAvatar(data.avatar);
+        if (userData.avatar) {
+          setUserAvatar(userData.avatar);
         } else {
           throw new Error('Аватар пользователя не был передан');
         }
+
+        setCards(cards);
       })
-
-      .then(() =>
-        api
-          .getInitialCards()
-
-          .then((data) => {
-            setCards(data);
-          })
-      )
 
       .catch(err => {
         console.log(`${err}`);
@@ -74,7 +68,7 @@ function Main(props) {
         <ul className="elements__list">
 
           {cards.map(item =>
-            <Card card={item} key={item._id} onCardClick={props.onCardClick}/>
+            (<Card card={item} key={item._id} onCardClick={props.onCardClick}/>)
           )}
 
         </ul>

@@ -5,7 +5,7 @@ function Card(props) {
   }
 
   return (
-    <li className="elements__card" key={props.card._id}>
+    <li className="elements__card">
       <button className="elements__delete-button" type="button"></button>
       <img className="elements__image"
            src={props.card.link}
