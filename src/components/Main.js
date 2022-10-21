@@ -1,46 +1,12 @@
 import React from "react";
-import api from "../utils/Api";
 import Card from "./Card";
+import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 function Main(props) {
 
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('');
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
+  const currentUser = React.useContext(CurrentUserContext);
 
 
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-
-      .then(([userData, cards]) => {
-
-        if (userData.name) {
-          setUserName(userData.name);
-        } else {
-          throw new Error('Имя пользователя не было передано');
-        }
-        if (userData.about) {
-          setUserDescription(userData.about);
-        } else {
-          throw new Error('Описание пользователя не было передано');
-        }
-        if (userData.avatar) {
-          setUserAvatar(userData.avatar);
-        } else {
-          throw new Error('Аватар пользователя не был передан');
-        }
-
-        setCards(cards);
-      })
-
-      .catch(err => {
-        console.log(`${err}`);
-        props.onServerError(err);
-      });
-
-  }, [])
 
   return (
     <main className="content">
@@ -48,31 +14,40 @@ function Main(props) {
       <section className="profile">
 
         <div className="profile__avatar"
-             style={{backgroundImage: `url(${userAvatar})`}}
+             style={{backgroundImage: `url(${currentUser.avatar})`}}
              onClick={props.onEditAvatar}></div>
         <div className="profile__description">
-          <h1 className="profile__name">{userName}</h1>
+          <h1 className="profile__name">{currentUser.name}</h1>
           <button className="profile__edit-button"
                   type="button"
                   onClick={props.onEditProfile}></button>
-          <p className="profile__job">{userDescription}</p>
+          <p className="profile__job">{currentUser.about}</p>
         </div>
         <button className="profile__add-button"
                 type="button"
-                onClick={props.onAddPlace}></button>
+                onClick={props.onAddPlaceClick}></button>
 
       </section>
 
       <section className="elements">
-
         <ul className="elements__list">
-
-          {cards.map(item =>
-            (<Card card={item} key={item._id} onCardClick={props.onCardClick}/>)
+          {props.cards.map(card => {
+              const isOwn = card.owner._id === currentUser._id;
+              const cardDeleteButtonClassName = (
+                `elements__delete-button ${isOwn ? '' : 'elements__delete-button_hidden'}`
+              );
+              const isLiked = card.likes.some(i => i._id === currentUser._id);
+              const cardLikeButtonClassName = (
+                `elements__like-button ${isLiked ? 'elements__like-button_type_active' : ''}`
+              );
+              return (<Card card={card} key={card._id} onCardClick={props.onCardClick}
+                            cardDeleteButtonClassName={cardDeleteButtonClassName}
+                            cardLikeButtonClassName={cardLikeButtonClassName}
+                            onCardLike={props.onCardLike}
+                            onCardDelete={props.onCardDelete}/>)
+            }
           )}
-
         </ul>
-
       </section>
 
     </main>
