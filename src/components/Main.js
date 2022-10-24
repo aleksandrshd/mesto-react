@@ -44,7 +44,7 @@ function Main(props) {
                             cardDeleteButtonClassName={cardDeleteButtonClassName}
                             cardLikeButtonClassName={cardLikeButtonClassName}
                             onCardLike={props.onCardLike}
-                            onCardDelete={props.onCardDelete}/>)
+                            onCardDelete={props.onCardDeleteClick}/>)
             }
           )}
         </ul>
