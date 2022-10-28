@@ -1,4 +1,4 @@
-function PopupWithForm({isOpen, onClose, name, title, buttonText, children, onSubmit, formValid}) {
+export default function PopupWithForm({isOpen, onClose, name, title, buttonText, children, onSubmit, formValid}) {
 
   return (
     <div className={`popup popup-${name} ${isOpen ? 'popup_opened' : ''}`}>
@@ -17,5 +17,3 @@ function PopupWithForm({isOpen, onClose, name, title, buttonText, children, onSu
     </div>
   );
 }
-
-export default PopupWithForm;

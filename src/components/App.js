@@ -1,8 +1,8 @@
 import React from "react";
+import {useEffect, useState} from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import PopupWithServerError from "./PopupWithServerError";
 import api from "../utils/Api";
@@ -12,32 +12,33 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ConfirmDeleteCardPopup from "./ConfirmDeleteCardPopup";
 
-function App() {
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
+export default function App() {
 
-  const [selectedCard, setSelectedCard] = React.useState({});
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [isServerErrorPopupOpen, setIsServerErrorPopupOpen] = useState(false);
+  const [serverError, setSeverError] = useState('');
+  const [currentUser, setСurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
+  const [selectedToDeleteCard, setSelectedToDeleteCard] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [isServerErrorPopupOpen, setIsServerErrorPopupOpen] = React.useState(false);
-  const [serverError, setSeverError] = React.useState('');
-
-  const [currentUser, setСurrentUser] = React.useState({});
-
-  const [cards, setCards] = React.useState([]);
-
-  const [selectedToDeleteCard, setSelectedToDeleteCard] = React.useState({});
-
-  const [isLoading, setIsLoading] = React.useState(false);
-
-
-  React.useEffect(() => {
+  useEffect(() => {
     api.getUserInfo()
-      .then(userInfo => setСurrentUser(userInfo));
+
+      .then(userInfo => setСurrentUser(userInfo))
+
+      .catch(err => {
+        console.log(`${err}`);
+        handleServerError(err);
+      });
+
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
 
     api.getInitialCards()
 
@@ -45,7 +46,7 @@ function App() {
 
       .catch(err => {
         console.log(`${err}`);
-        /*props.onServerError(err);*/
+        handleServerError(err);
       });
 
   }, []);
@@ -76,8 +77,11 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsDeleteCardPopupOpen(false);
-    setIsServerErrorPopupOpen(false);
     setSelectedCard({});
+  }
+
+  function closeServerErrorPopupPopup() {
+    setIsServerErrorPopupOpen(false);
   }
 
   function handleUpdateUser(userName, userJob) {
@@ -85,7 +89,14 @@ function App() {
     setIsLoading(true);
 
     api.setUserInfo(userName, userJob)
+
       .then(userInfo => setСurrentUser(userInfo))
+
+      .catch(err => {
+        console.log(`${err}`);
+        handleServerError(err);
+        console.log(isServerErrorPopupOpen);
+      })
 
       .finally(() => {
         setIsLoading(false);
@@ -101,6 +112,11 @@ function App() {
 
       .then(userInfo => setСurrentUser(userInfo))
 
+      .catch(err => {
+        console.log(`${err}`);
+        handleServerError(err);
+      })
+
       .finally(() => {
         setIsLoading(false);
         closeAllPopups();
@@ -113,6 +129,11 @@ function App() {
     api.setNewCard(cardName, cardLink)
 
       .then((newCard) => setCards([newCard, ...cards]))
+
+      .catch(err => {
+        console.log(`${err}`);
+        handleServerError(err);
+      })
 
       .finally(() => {
         setIsLoading(false);
@@ -130,6 +151,11 @@ function App() {
 
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
 
+      })
+
+      .catch(err => {
+        console.log(`${err}`);
+        handleServerError(err);
       });
 
   }
@@ -141,6 +167,11 @@ function App() {
     api.deleteCard(cardToDelete._id)
 
       .then(() => setCards(cards.filter(cardInitial => cardInitial._id != cardToDelete._id)))
+
+      .catch(err => {
+        console.log(`${err}`);
+        handleServerError(err);
+      })
 
       .finally(() => {
         setIsLoading(false);
@@ -154,7 +185,6 @@ function App() {
     setSelectedToDeleteCard(card);
   }
 
-
   return (
 
     <CurrentUserContext.Provider value={currentUser}>
@@ -167,7 +197,6 @@ function App() {
               onEditProfile={handleEditProfileClick}
               onAddPlaceClick={handleAddPlaceClick}
               onCardClick={handleCardClick}
-              onServerError={handleServerError}
               cards={cards}
               onCardLike={handleCardLike}
               onCardDeleteClick={handleCardDeleteClick}/>
@@ -199,14 +228,13 @@ function App() {
 
         <PopupWithServerError name="server-error" title="Возникла ошибка"
                               isOpen={isServerErrorPopupOpen}
-                              onClose={closeAllPopups}
+                              onClose={closeServerErrorPopupPopup}
                               serverError={serverError}
-                              buttonText='Ок'/>
+                              onClick={closeServerErrorPopupPopup}
+                              buttonText='Закрыть'/>
 
       </div>
 
     </CurrentUserContext.Provider>
   );
 }
-
-export default App;

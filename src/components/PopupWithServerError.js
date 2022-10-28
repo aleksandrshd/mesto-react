@@ -1,4 +1,4 @@
-function PopupWithServerError(props) {
+export default function PopupWithServerError(props) {
 
   return (
     <div className={`popup popup-${props.name} ${props.isOpen ? 'popup_opened' : ''}`}>
@@ -8,13 +8,12 @@ function PopupWithServerError(props) {
         <h2 className="popup__title">{props.title}</h2>
         <div className="popup__form">
           <span className="popup__error popup__error_server">{props.serverError}</span>
-          <button className="popup__save-button popup__save-button_type_disabled" type="submit"
-                  disabled>{props.buttonText}</button>
+          <button className="popup__save-button"
+                  type="submit"
+                  onClick={props.onClick}>{props.buttonText}</button>
         </div>
       </div>
 
     </div>
   );
 }
-
-export default PopupWithServerError;

@@ -1,6 +1,7 @@
-function ImagePopup(props) {
+export default function ImagePopup(props) {
+
   return (
-    <div className={`popup popup-image ${!(Object.entries(props.card).length === 0) ? 'popup_opened' : ''}`}>
+    <div className={`popup popup-image ${props.card.hasOwnProperty('name') ? 'popup_opened' : ''}`}>
 
       <div className="popup__container popup__container-image">
         <button className="popup__close-button"
@@ -15,5 +16,3 @@ function ImagePopup(props) {
     </div>
   );
 }
-
-export default ImagePopup;

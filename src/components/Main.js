@@ -1,12 +1,11 @@
 import React from "react";
+import { useContext } from "react";
 import Card from "./Card";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
-function Main(props) {
+export default function Main(props) {
 
-  const currentUser = React.useContext(CurrentUserContext);
-
-
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className="content">
@@ -30,28 +29,24 @@ function Main(props) {
       </section>
 
       <section className="elements">
+
         <ul className="elements__list">
+
           {props.cards.map(card => {
-              const isOwn = card.owner._id === currentUser._id;
-              const cardDeleteButtonClassName = (
-                `elements__delete-button ${isOwn ? '' : 'elements__delete-button_hidden'}`
-              );
-              const isLiked = card.likes.some(i => i._id === currentUser._id);
-              const cardLikeButtonClassName = (
-                `elements__like-button ${isLiked ? 'elements__like-button_type_active' : ''}`
-              );
-              return (<Card card={card} key={card._id} onCardClick={props.onCardClick}
-                            cardDeleteButtonClassName={cardDeleteButtonClassName}
-                            cardLikeButtonClassName={cardLikeButtonClassName}
+              return (<Card card={card}
+                            key={card._id}
+                            onCardClick={props.onCardClick}
                             onCardLike={props.onCardLike}
                             onCardDelete={props.onCardDeleteClick}/>)
             }
           )}
+
         </ul>
+
       </section>
 
     </main>
   );
+
 }
 
-export default Main;

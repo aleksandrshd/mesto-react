@@ -1,7 +1,7 @@
-import PopupWithForm from "./PopupWithForm";
 import React from "react";
+import PopupWithForm from "./PopupWithForm";
 
-function ConfirmDeleteCardPopup({isOpen, onClose, selectedToDeleteCard, handleCardDelete, isLoading}) {
+export default function ConfirmDeleteCardPopup({isOpen, onClose, selectedToDeleteCard, handleCardDelete, isLoading}) {
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -19,5 +19,3 @@ function ConfirmDeleteCardPopup({isOpen, onClose, selectedToDeleteCard, handleCa
   );
 
 }
-
-export default ConfirmDeleteCardPopup;
