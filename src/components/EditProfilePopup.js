@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext, useState, useEffect } from "react";
+import {useContext, useState, useEffect} from "react";
 import PopupWithForm from "./PopupWithForm";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 import {validators} from "../utils/validators";
@@ -13,16 +13,32 @@ export default function EditProfilePopup({isOpen, onClose, onUpdateUser, isLoadi
     description: currentUser.about || ''
   });
 
-  const [formErrors, setFormErrors] = useState({});
+  const [formErrors, setFormErrors] = useState({
+    name: {
+      empty: true,
+      minLength: true,
+      maxLength: false
+    },
+    description: {
+      empty: false,
+      minLength: true,
+      maxLength: false
+    }
+  });
 
   const [isInvalid, setIsInvalid] = useState(true);
+
+  const [textNameError, setTextNameError] = useState('');
+  const [textDescriptionError, setTextDescriptionError] = useState('');
 
   useEffect(() => {
     setFormValues({
       name: currentUser.name || '',
       description: currentUser.about || ''
     });
+
     setIsInvalid(false);
+
   }, [currentUser, isOpen]);
 
   function handleInputChange(event) {
@@ -30,7 +46,7 @@ export default function EditProfilePopup({isOpen, onClose, onUpdateUser, isLoadi
       ...prevValues,
       [event.target.name]: event.target.value
     }));
-    console.log('formValues', formValues);
+
   }
 
   function handleSubmit(event) {
@@ -57,7 +73,9 @@ export default function EditProfilePopup({isOpen, onClose, onUpdateUser, isLoadi
       return {[key]: errors};
 
     }).reduce((acc, item) => ({...acc, ...item}), {});
+
     setFormErrors(allErrors);
+
   }, [formValues, setFormErrors]);
 
   useEffect(() => {
@@ -71,9 +89,28 @@ export default function EditProfilePopup({isOpen, onClose, onUpdateUser, isLoadi
     }
 
     setIsInvalid(false);
-    console.log('Валидность изменена', isInvalid);
 
   }, [formErrors, setIsInvalid]);
+
+  useEffect(() => {
+
+    if (formErrors.name.empty) {
+      setTextNameError('Введите имя пользователя');
+    } else if (formErrors.name.minLength) {
+      setTextNameError('Минимальная длина имени пользователя 2 символа')
+    } else if (formErrors.name.maxLength) {
+      setTextNameError('Максимальная длина имени пользователя 40 символов')
+    } else setTextNameError('');
+
+    if (formErrors.description.empty) {
+      setTextDescriptionError('Введите описание пользователя');
+    } else if (formErrors.description.minLength) {
+      setTextDescriptionError('Минимальная длина описания пользователя 2 символа')
+    } else if (formErrors.description.maxLength) {
+      setTextDescriptionError('Максимальная длина описания пользователя 200 символов')
+    } else setTextDescriptionError('');
+
+  }, [formErrors]);
 
   return (
     <PopupWithForm name="profile" title="Редактировать профиль"
@@ -87,22 +124,16 @@ export default function EditProfilePopup({isOpen, onClose, onUpdateUser, isLoadi
              type="text"
              name="name"
              placeholder="Имя пользователя"
-             required
-             minLength="2"
-             maxLength="40"
              value={formValues.name || ''}
              onChange={handleInputChange}/>
-      <span className="popup__error">{}</span>
+      <span className="popup__error">{textNameError}</span>
       <input className="popup__input popup__input_type_job"
              type="text"
              name="description"
              placeholder="Описание"
-             required
-             minLength="2"
-             maxLength="200"
              value={formValues.description || ''}
              onChange={handleInputChange}/>
-      <span className="popup__error">{}</span>
+      <span className="popup__error">{textDescriptionError}</span>
 
     </PopupWithForm>
   );
